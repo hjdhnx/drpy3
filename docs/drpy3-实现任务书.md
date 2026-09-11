@@ -189,6 +189,10 @@ fjs 对接要点（已核实其 Cargo.toml 与 README）：
 > 注意：`docs/央视频-1/2.js` 为设计阶段演示稿（解密与取参有省略），不能当真源用——真源以
 > 央视频-dr3.js 为准。
 
+> **pdfl 升必注入（2026-09-12，项目主决定）**：HostEnv 必注入清单为 req/pdfh/pdfa/pd/**pdfl**
+> 五件套（pdfl = 批量整表解析，drpy2.1 加速语义转正）。未注入时 capabilities 诚实标 missing、
+> check() 清单提示，parse 层仍保留 pdfa+逐元素回退保证正确性不倒退。
+
 ---
 
 ## 5. 新会话工作法（给 agent 的纪律）

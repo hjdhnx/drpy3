@@ -442,6 +442,7 @@ const rt = new Runtime({
     req(url, options) {...},               // HTTP。可同步可异步，返回 {content, headers}（契约同 drpy2，但允许 Promise）
     pdfh(html, parse), pdfa(html, parse),  // jsoup 封装三件套（继承"pdf 系列交给壳子"的既定设计）
     pd(html, parse, base_url),
+    pdfl(html, parse, list_text, list_url, my_url),  // 整列表批量解析（drpy2.1 加速语义，2026-09-12 起升必注入）
 
     // ═══ 可选注入（不给则框架用内置 JS 实现兜底，能跑但可能不如原生）═══
     batchFetch(items),                     // 默认：框架用 req + Promise.all 实现
@@ -459,7 +460,7 @@ const rt = new Runtime({
 
 // 构造期一次性自检：缺什么、什么走了兜底，立刻打印清楚——不再"缺了运行期才炸"
 rt.capabilities
-// => { req: 'host', pdfh: 'host', pd: 'host', joinUrl: 'builtin',
+// => { req: 'host', pdfh: 'host', pd: 'host', pdfl: 'host', joinUrl: 'builtin',
 //      store: 'memory-fallback', batchFetch: 'builtin', wasm: 'native', ... }
 ```
 
@@ -484,7 +485,8 @@ rt.use(await import('./my-parser.mjs')); // 也可以整包覆盖
 | `local` | `store` | 改名并按源隔离（框架保证命名空间，壳子不再自己拼 key） |
 | `console` | `log` | 可选，有兜底 |
 | `getProxy` | `getProxy` | 不变 |
-| `key` / `_debug` / `pdfl` | 并入 `meta` / `env` / 标准库 | 名词不再游离 |
+| `key` / `_debug` | 并入 `meta` / `env` | 名词不再游离 |
+| `pdfl` | 升为必注入五件套之一（批量整表解析语义，§9 parse） | 从可选加速位转正 |
 
 ---
 

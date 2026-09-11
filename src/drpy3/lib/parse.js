@@ -8,7 +8,8 @@ export function makeParse(rt) {
         pdfh: (html, parseRule, baseUrl = '') => rt.resolve('pdfh')(html, parseRule, baseUrl),
         pdfa: (html, parseRule) => rt.resolve('pdfa')(html, parseRule),
         pd: (html, parseRule, baseUrl = '') => rt.resolve('pd')(html, parseRule, baseUrl),
-        // HostEnv 未注入 pdfl 时框架回退：pdfa 取列表 + 逐元素 pdfh/pd（§9，正确性不受影响）
+        // pdfl 必注入（批量整表解析，drpy2.1 加速语义）；此处保留逐元素回退仅为
+        // 兼容未注入的宿主（正确性一致，性能退化）——capabilities.pdfl 会诚实标 missing
         pdfl: (html, parseRule, listText, listUrl, myUrl) => {
             const host = rt.resolve('pdfl');
             if (typeof host === 'function') {

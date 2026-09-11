@@ -38,14 +38,14 @@ npm run build        # 生成 dist/drpy3.js（可读单文件）+ dist/drpy3.esm
 ```js
 import { Runtime } from './drpy3.js';
 
-const rt = new Runtime({ req, pdfh, pdfa, pd });        // HostEnv 注入（§7）
+const rt = new Runtime({ req, pdfh, pdfa, pd, pdfl });  // HostEnv 注入（§7）
 const src = await rt.load(sourceCode, { key: '_x' });
 await src.init('');
 const home = await src.home('');
 const list = await src.search('斗罗大陆', false, 1);
 ```
 
-宿主只需注入 `req / pdfh / pdfa / pd` 四项（其余能力有内置兜底，能力表 `rt.capabilities` 可查）。
+宿主只需注入 `req / pdfh / pdfa / pd / pdfl` 五项（其余能力有内置兜底，能力表 `rt.capabilities` 可查）。
 
 ## 源作者
 

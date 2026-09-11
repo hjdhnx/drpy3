@@ -8,17 +8,19 @@ const FULL = {
     pdfh: (html, parse) => '',
     pdfa: (html, parse) => [],
     pd: (html, parse, base) => '',
+    pdfl: (html, parse, lt, lu, mu) => [],
 };
 
 test('W1 构造期校验：缺必注入项 → check() 打印清单 + capabilities 标 missing', () => {
     const logs = [];
     const rt = new Runtime({log: (...a) => logs.push(a.join(' '))});
     const rep = rt.check();
-    assert.deepEqual(rep.missing.sort(), ['pd', 'pdfa', 'pdfh', 'req'].sort());
+    assert.deepEqual(rep.missing.sort(), ['pd', 'pdfa', 'pdfh', 'pdfl', 'req'].sort());
     // 打印清单：日志中能看到缺失项（不再"缺了运行期才炸"）
     assert.ok(logs.some((l) => l.includes('req') && l.includes('pdfh')), '日志含缺失清单');
     assert.equal(rt.capabilities.req, 'missing');
     assert.equal(rt.capabilities.pdfh, 'missing');
+    assert.equal(rt.capabilities.pdfl, 'missing');
 });
 
 test('W1 必注入齐全 → capabilities 全 host', () => {
@@ -67,10 +69,13 @@ test('W1 store 未注入 → memory-fallback 且可用；log 未注入 → 兜�
     assert.equal(typeof rt.resolve('log'), 'function');
 });
 
-test('W1 batchFetch/pdfl 未注入 → builtin 兜底', () => {
+test('W1 batchFetch 未注入 → builtin 兜底；pdfl 必注入未注入 → missing（parse 层保留逐元素回退）', () => {
     const rt = new Runtime(FULL);
     assert.equal(rt.capabilities.batchFetch, 'builtin');
-    assert.equal(rt.capabilities.pdfl, 'builtin');
+    assert.equal(rt.capabilities.pdfl, 'host', 'FULL 已注入 pdfl');
+    const rt2 = new Runtime({req: () => ({content: '', headers: {}}), pdfh: () => '', pdfa: () => [], pd: () => ''});
+    assert.equal(rt2.capabilities.pdfl, 'missing');
+    assert.ok(rt2.check().missing.includes('pdfl'), 'check() 清单包含 pdfl');
 });
 
 test('W1 wasm 能力检测：Node 原生 → native；HostEnv 可显式声明 polyfill/none', () => {

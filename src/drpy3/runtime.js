@@ -9,9 +9,10 @@ import {defaults as declarativeDefaults} from './rules/defaults.js';
 import {Drpy3Error} from './errors.js';
 
 // 框架有内置兜底的 HostEnv 字段（缺注入不致命，走兜底并在 capabilities 标注）
-const BUILTIN_FALLBACK = new Set(['batchFetch', 'pdfl', 'joinUrl', 'store', 'log', 'getProxy', 'loadAsset']);
-// 必须注入（框架无法兜底的系统能力）
-const REQUIRED = ['req', 'pdfh', 'pdfa', 'pd'];
+const BUILTIN_FALLBACK = new Set(['batchFetch', 'joinUrl', 'store', 'log', 'getProxy', 'loadAsset']);
+// 必须注入（框架无法兜底的系统能力）。pdfl 为整列表批量解析（drpy2.1 加速语义），
+// 未注入时 parse 层保留 pdfa+逐元素回退保证正确性，但能力表诚实标注 missing。
+const REQUIRED = ['req', 'pdfh', 'pdfa', 'pd', 'pdfl'];
 
 // 内置兜底实现注册表：名字 -> factory(hostEnv)（惰性调用，保持 runtime 无重依赖）
 const BUILTINS = {
@@ -19,10 +20,9 @@ const BUILTINS = {
     store: () => memoryStore(),
     log: () => (...args) => console.log(...args),
     getProxy: () => () => 'http://127.0.0.1:9978/proxy?do=js',
-    // batchFetch / pdfl 兜底依赖 net/parse 上下文，在 lib/net.js、lib/parse.js 中组装（W4/W5），
-    // 这里先声明存在性供 capabilities 标注；resolve('batchFetch'/'pdfl') 由 net/parse 层拦截。
+    // batchFetch 兜底依赖 net 上下文，在 lib/net.js 中组装（W4）；
+    // resolve('batchFetch') 由 net 层拦截。pdfl 已升必注入（REQUIRED）。
     batchFetch: null,
-    pdfl: null,
     loadAsset: null, // 无兜底：随源资产（wasm 等）必须有宿主实现才可用
 };
 

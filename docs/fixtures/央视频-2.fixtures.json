@@ -6,7 +6,7 @@
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "221"
@@ -19,7 +19,7 @@
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "221"
@@ -32,7 +32,7 @@
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "221"
@@ -45,7 +45,7 @@
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "221"
@@ -58,7 +58,7 @@
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "221"
@@ -71,7 +71,7 @@
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "221"
@@ -84,7 +84,7 @@
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "2"
@@ -93,24 +93,24 @@
  {
   "key": "GET|b0|http://drpy3.mock/episodesList?vid=lastvid1&serviceId=tvcctv",
   "url": "http://drpy3.mock/episodesList?vid=lastvid1&serviceId=tvcctv",
-  "content": "{\"list\":[{\"url\":\"http://127.0.0.1:20039/hls/ep1.m3u8\"},{\"url\":\"http://127.0.0.1:20039/hls/ep2.m3u8\"}]}",
+  "content": "{\"list\":[{\"url\":\"http://127.0.0.1:20234/hls/ep1.m3u8\"},{\"url\":\"http://127.0.0.1:20234/hls/ep2.m3u8\"}]}",
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "102"
   }
  },
  {
-  "key": "GET|b0|http://drpy3.mock/api/getHttpVideoInfo.do?pid=http://127.0.0.1:20039/hls/ep1.m3u8",
-  "url": "http://drpy3.mock/api/getHttpVideoInfo.do?pid=http://127.0.0.1:20039/hls/ep1.m3u8",
-  "content": "{\"hls_url\":\"http://127.0.0.1:20039/hls/main.m3u8?cntv=1\",\"manifest\":{\"hls_h5e_url\":\"http://127.0.0.1:20039/hls/main.m3u8?h5e=1\"}}",
+  "key": "GET|b0|http://drpy3.mock/api/getHttpVideoInfo.do?pid=http://127.0.0.1:20234/hls/ep1.m3u8",
+  "url": "http://drpy3.mock/api/getHttpVideoInfo.do?pid=http://127.0.0.1:20234/hls/ep1.m3u8",
+  "content": "{\"hls_url\":\"http://127.0.0.1:20234/hls/main.m3u8?cntv=1\",\"manifest\":{\"hls_h5e_url\":\"http://127.0.0.1:20234/hls/main.m3u8?h5e=1\"}}",
   "headers": {
    "status": "HTTP/1.1 200",
    "content-type": "application/json; charset=utf-8",
-   "date": "Fri, 11 Sep 2026 22:53:25 GMT",
+   "date": "Fri, 11 Sep 2026 23:10:23 GMT",
    "connection": "keep-alive",
    "keep-alive": "timeout=5",
    "content-length": "129"
