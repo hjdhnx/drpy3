@@ -10,18 +10,19 @@ import https from 'node:https';
 import {execFileSync} from 'node:child_process';
 import {pathToFileURL, fileURLToPath} from 'node:url';
 
-// pdf 三件套实现位置：默认 drpy-node 生产实现（DRPY_HTML_PARSER 环境变量可覆盖）
+const HERE_DIR = path.dirname(fileURLToPath(import.meta.url));
+const CORE_INDEX_URL = pathToFileURL(path.resolve(HERE_DIR, '..', 'src', 'drpy3', 'index.js')).href;
+
+// pdf 三件套实现：仓库内置 cli/htmlParser.js（自 drpy-node 生产实现移植）。
+// DRPY_HTML_PARSER 环境变量可覆盖为其他实现。
 const PARSER_URL = process.env.DRPY_HTML_PARSER
     ? pathToFileURL(process.env.DRPY_HTML_PARSER).href
-    : 'file:///E:/gitwork/drpy-node/libs_drpy/htmlParser.js';
+    : pathToFileURL(path.join(HERE_DIR, 'htmlParser.js')).href;
 const nativeLog = console.log;
 console.log = () => {}; // 仅解析器模块求值窗口内静默初始化日志
 const _parserMod = await import(PARSER_URL);
 console.log = nativeLog;
 const jsoup = _parserMod.jsoup;
-
-const HERE_DIR = path.dirname(fileURLToPath(import.meta.url));
-const CORE_INDEX_URL = pathToFileURL(path.resolve(HERE_DIR, '..', 'src', 'drpy3', 'index.js')).href;
 
 const BINARY_EXT = new Set(['.wasm', '.ts', '.mp4', '.m4s', '.jpg', '.png', '.gif', '.webp']);
 

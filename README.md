@@ -80,8 +80,8 @@ test/             node:test 单测（58 用例）
 - 金标准 A：百忙无果1（零样板）六环节；B：央视频-1（wasm 解密播放，fixtures 回放）；C：百忙无果[官]
   drpy2 原版零改动经 load2x；
 - `test/helpers/mock-server.mjs` 为独立进程 mock（同步 req 会阻塞事件循环）；
-- pdf 三件套复用 drpy-node 生产实现（`DRPY_HTML_PARSER` 环境变量可指定 htmlParser.js 路径，
-  默认 `file:///E:/gitwork/drpy-node/libs_drpy/htmlParser.js`）。
+- pdf 三件套（pdfh/pdfa/pd/pdfl）为仓库内置 `cli/htmlParser.js`（自 drpy-node 生产实现移植）；
+  `DRPY_HTML_PARSER` 环境变量可替换。
 
 ## 许可
 
