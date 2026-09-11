@@ -4,6 +4,7 @@
   "type": "module",
   "description": "drpy3 —— 站在 drpy2 肩膀上的下一代源规则引擎：实例模型 / async / 模块化 / wasm 一等公民 / drpy2 兼容层",
   "main": "dist/drpy3.js",
+  "types": "types/drpy3.d.ts",
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "test:drpy3": "node --test test/*.test.mjs",

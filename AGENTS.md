@@ -10,7 +10,10 @@ drpy3 的专属仓库：下一代 drpy 源规则引擎（从 drpy-webpack 仓库
 1. AGENTS.md（本文件）
 2. `docs/drpy3-实现任务书.md` —— 执行手册：W0-W13 工作包、§4 进度表（跨会话真相源）、§5 工作法纪律
 3. `docs/drpy3-设计文档.md` —— 设计唯一真相源（附录 A = 已否决决策清单，禁止重提）
-4. `docs/drpy2-移植对接指南.md` —— drpy2 契约参考（load2x 兼容层基准）
+4. `docs/宿主对接指南.md` —— **跨语言宿主适配规范**（文件清单/注入契约/调度契约/异步三档/自检清单）：
+   改 HostEnv、net、parse、lifecycle 等注入面时必须同步更新该文档
+5. `docs/drpy2-移植对接指南.md` —— drpy2 契约参考（load2x 兼容层基准）
+6. `types/drpy3.d.ts` —— 类型面；**对外契约（HostEnv/Runtime/Source/返回结构）变更时必须同步更新**
 
 ## 关键事实
 

@@ -1,7 +1,13 @@
 # drpy3 —— 站在 drpy2 肩膀上的下一代源规则引擎
 
-> 设计文档：[docs/drpy3-设计文档.md](docs/drpy3-设计文档.md)（唯一真相源）｜
-> 执行手册：[docs/drpy3-实现任务书.md](docs/drpy3-实现任务书.md)（W0-W13 工作包 + 进度表）
+> **给源作者**：[源自测 CLI](#源作者) ｜ **给宿主开发者**：[docs/宿主对接指南.md](docs/宿主对接指南.md)
+> （跨语言适配规范：文件清单/注入契约/调度契约/异步三档/自检清单）
+>
+> 文档索引：[设计文档](docs/drpy3-设计文档.md)（唯一真相源，附录 A=已否决决策）｜
+> [实现任务书](docs/drpy3-实现任务书.md)（工作包+进度表）｜
+> [宿主对接指南](docs/宿主对接指南.md)（其他语言适配）｜
+> [drpy2 移植对接指南](docs/drpy2-移植对接指南.md)（兼容层契约依据）｜
+> [类型面](types/drpy3.d.ts)（TS/IDE 共用）
 
 drpy3 完整继承 drpy2 的设计哲学（源=爬虫、标准库沉淀、TVBox 数据结构不动摇、声明式规则优先），
 并解决 drpy2 的五大结构性痛点：
@@ -82,6 +88,15 @@ test/             node:test 单测（58 用例）
 - `test/helpers/mock-server.mjs` 为独立进程 mock（同步 req 会阻塞事件循环）；
 - pdf 三件套（pdfh/pdfa/pd/pdfl）为仓库内置 `cli/htmlParser.js`（自 drpy-node 生产实现移植）；
   `DRPY_HTML_PARSER` 环境变量可替换。
+
+## 类型面与二次开发
+
+- `types/drpy3.d.ts`：Runtime/Source/HostEnv/Ctx/返回结构的完整类型声明（TS 宿主直接引用；
+  其他语言宿主把它当契约清单核对）。
+- 源码即文档：`src/drpy3/**` 每个模块头部注明对应设计章节；`dist/drpy3.js` 可读单文件保留
+  原始标识符与模块分区，便于对照。
+- 对外 API 面刻意保持最小：`Runtime / defineSource / VERSION`——其余能力全部经 `hostEnv`
+  注入与 `ctx.lib` 下发，升级不破坏宿主。
 
 ## 许可
 
