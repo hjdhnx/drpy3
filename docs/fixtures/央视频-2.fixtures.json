@@ -1,0 +1,119 @@
+[
+ {
+  "key": "GET|b0|http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=1",
+  "url": "http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=1",
+  "content": "{\"response\":{\"docs\":[{\"column_name\":\"栏目1\",\"column_logo\":\"http://img.example.com/col.jpg\",\"column_firstclass\":\"栏目\",\"channel_name\":\"CCTV-1\",\"column_brief\":\"测试栏目\",\"lastVIDE\":{\"videoSharedCode\":\"lastvid1\"}}]}}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "221"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=2",
+  "url": "http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=2",
+  "content": "{\"response\":{\"docs\":[{\"column_name\":\"栏目2\",\"column_logo\":\"http://img.example.com/col.jpg\",\"column_firstclass\":\"栏目\",\"channel_name\":\"CCTV-1\",\"column_brief\":\"测试栏目\",\"lastVIDE\":{\"videoSharedCode\":\"lastvid2\"}}]}}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "221"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=3",
+  "url": "http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=3",
+  "content": "{\"response\":{\"docs\":[{\"column_name\":\"栏目3\",\"column_logo\":\"http://img.example.com/col.jpg\",\"column_firstclass\":\"栏目\",\"channel_name\":\"CCTV-1\",\"column_brief\":\"测试栏目\",\"lastVIDE\":{\"videoSharedCode\":\"lastvid3\"}}]}}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "221"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=4",
+  "url": "http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=4",
+  "content": "{\"response\":{\"docs\":[{\"column_name\":\"栏目4\",\"column_logo\":\"http://img.example.com/col.jpg\",\"column_firstclass\":\"栏目\",\"channel_name\":\"CCTV-1\",\"column_brief\":\"测试栏目\",\"lastVIDE\":{\"videoSharedCode\":\"lastvid4\"}}]}}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "221"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=5",
+  "url": "http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=5",
+  "content": "{\"response\":{\"docs\":[{\"column_name\":\"栏目5\",\"column_logo\":\"http://img.example.com/col.jpg\",\"column_firstclass\":\"栏目\",\"channel_name\":\"CCTV-1\",\"column_brief\":\"测试栏目\",\"lastVIDE\":{\"videoSharedCode\":\"lastvid5\"}}]}}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "221"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=6",
+  "url": "http://drpy3.mock/lanmu/columnSearch?serviceId=tvcctv&t=json&n=100&p=6",
+  "content": "{\"response\":{\"docs\":[{\"column_name\":\"栏目6\",\"column_logo\":\"http://img.example.com/col.jpg\",\"column_firstclass\":\"栏目\",\"channel_name\":\"CCTV-1\",\"column_brief\":\"测试栏目\",\"lastVIDE\":{\"videoSharedCode\":\"lastvid6\"}}]}}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "221"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/search.php?qtext=%E6%96%97%E7%BD%97%E5%A4%A7%E9%99%86&type=video",
+  "url": "http://drpy3.mock/search.php?qtext=%E6%96%97%E7%BD%97%E5%A4%A7%E9%99%86&type=video",
+  "content": "{}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "2"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/episodesList?vid=lastvid1&serviceId=tvcctv",
+  "url": "http://drpy3.mock/episodesList?vid=lastvid1&serviceId=tvcctv",
+  "content": "{\"list\":[{\"url\":\"http://127.0.0.1:20302/hls/ep1.m3u8\"},{\"url\":\"http://127.0.0.1:20302/hls/ep2.m3u8\"}]}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "102"
+  }
+ },
+ {
+  "key": "GET|b0|http://drpy3.mock/api/getHttpVideoInfo.do?pid=http://127.0.0.1:20302/hls/ep1.m3u8",
+  "url": "http://drpy3.mock/api/getHttpVideoInfo.do?pid=http://127.0.0.1:20302/hls/ep1.m3u8",
+  "content": "{\"hls_url\":\"http://127.0.0.1:20302/hls/main.m3u8?cntv=1\",\"manifest\":{\"hls_h5e_url\":\"http://127.0.0.1:20302/hls/main.m3u8?h5e=1\"}}",
+  "headers": {
+   "status": "HTTP/1.1 200",
+   "content-type": "application/json; charset=utf-8",
+   "date": "Fri, 11 Sep 2026 22:20:11 GMT",
+   "connection": "keep-alive",
+   "keep-alive": "timeout=5",
+   "content-length": "129"
+  }
+ }
+]

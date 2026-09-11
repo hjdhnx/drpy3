@@ -1,0 +1,5 @@
+node_modules/
+.smoke/
+.idea/
+.__drpy3_*
+*.log
