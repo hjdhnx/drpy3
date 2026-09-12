@@ -12,6 +12,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fjs/fjs.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 /// 桥协议错误（胶水 drpy3Call 返回 {"__drpy3_error": {...}} 时抛出）。
 class Drpy3Exception implements Exception {
@@ -163,6 +164,18 @@ class Drpy3Host {
     );
     await host._call('drpy3Setup', [jsonEncode({'fjsVersion': fjsVersion})]);
     return host;
+  }
+
+  /// 便捷装载：从 Flutter 资产读 bundle 并装配宿主。
+  /// 方式 A（包依赖引入本包）用默认 package 资产路径；
+  /// 方式 B（拷文件进 app）传 assetPath: 'assets/drpy3-fjs.bundle.js'。
+  static Future<Drpy3Host> createWithAsset({
+    String assetPath = 'packages/drpy3_fjs_host/assets/drpy3-fjs.bundle.js',
+    Drpy3BridgeHandlers? handlers,
+    String fjsVersion = '',
+  }) async {
+    final bundle = await rootBundle.loadString(assetPath);
+    return create(bundleSource: bundle, handlers: handlers, fjsVersion: fjsVersion);
   }
 
   /// 桥分发：JsValue.object → action 路由 → JsResult。

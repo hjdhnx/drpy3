@@ -1,5 +1,7 @@
 # drpy3 × fjs 宿主（Flutter）
 
+> **要把这套东西集成进你的 App（APK）？直接看 [APK接入指南.md](APK接入指南.md)**——面向执行 agent 的自包含交接文档（依赖引入 / 构建环境 / 最小代码 / 源分发形态 / 踩坑红线 / 验收清单）。
+
 drpy3 引擎在 [fjs](https://github.com/fluttercandies/fjs)（Rust QuickJS + flutter_rust_bridge）
 上的宿主实现——**异步档 A**（fjs 内部驱动器自动泵 Promise/timer，原生真并发 IO）。
 对应设计文档对接矩阵 §2「Flutter (fjs)」行、任务书 W13、宿主对接指南 §5/§6。

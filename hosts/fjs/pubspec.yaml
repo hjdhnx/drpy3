@@ -13,6 +13,7 @@ dependencies:
   fjs:
     git:
       url: https://github.com/fluttercandies/fjs.git
+      ref: 8195d78bc0335045fd62bcf4835c3e889b54c77b # v3.3.0（与 pub.dev 3.3.0 同内容；锁 commit 防上游破坏性变更）
   # fjs 3.3.0 的 FRB 生成代码基于 2.12.x，sanityCheck 要求运行时版本一致（2.13 会抛异常）
   flutter_rust_bridge: 2.12.0
 
