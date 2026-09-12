@@ -143,7 +143,7 @@ fjs 对接要点（已核实其 Cargo.toml 与 README）：
 | W10 | `drpy3 test` CLI：六环节 + record/replay + 结构化报错 | §14.3 | 百忙无果1-4 与央视频-1/2 全部 test 全绿（fixtures 录制） | ⬜ |
 | W11 | 运行时对接：Node 完全体（fetch+cheario+fs store，档 A 真并发） | §5.4 | 并发基准：多请求墙钟 ≤ 串行 50% | ⬜ |
 | W12 | 运行时对接：QuickJS 同步桥（档 C；python 或 quickjs 绑定） | §5.4 档C | 百忙无果1 六环节在 QuickJS 内跑通 | ⬜ |
-| W13 | 运行时对接：Flutter fjs（bridge 注入 HostEnv + declareNewModule 模块 + polywasm/原生解密决策） | §5.4/§8/§12.1 | 央视频-1 六环节在 fjs 模拟器跑通；capabilities.wasm 报告正确 | ⬜ |
+| W13 | 运行时对接：Flutter fjs（bridge 注入 HostEnv + declareNewModule 模块；wasm=none 源降级，无 syncReq——drpy2 老源不支持） | §5.4/§8/§12.1 | 宿主套件 `hosts/fjs/`：金标准 A（百忙无果1）六环节双重验证——Node bundle+bridge 模拟（test/w13-fjs-host.test.mjs）+ Windows 真实 fjs 引擎（integration_test）；capabilities.wasm=native 报告正确 | ✅ |
 | W14 | 运行时对接：QuickJS Android 2026（R1 路线，§2.1）——JNI/FFI 桥 + HostEnv 全原生映射 + pdfh 语义包装 + 事件循环 pump 实测 | §2.1 | 央视频-1 在 Android 真机跑通且 capabilities.wasm='native'；与 fjs+polywasm 跑同一解密基准对比 | ⬜ |
 
 依赖链：W0→W1→W2→W3→(W4,W5)→W6→(W7,W8,W9)→W10→(W11,W12,W13,W14 可并行)。
