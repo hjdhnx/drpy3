@@ -612,7 +612,8 @@ function makeParse(rt2) {
     pdfh: (html3, parseRule2, baseUrl = "") => rt2.resolve("pdfh")(html3, parseRule2, baseUrl),
     pdfa: (html3, parseRule2) => rt2.resolve("pdfa")(html3, parseRule2),
     pd: (html3, parseRule2, baseUrl = "") => rt2.resolve("pd")(html3, parseRule2, baseUrl),
-    // HostEnv 未注入 pdfl 时框架回退：pdfa 取列表 + 逐元素 pdfh/pd（§9，正确性不受影响）
+    // pdfl 必注入（批量整表解析，drpy2.1 加速语义）；此处保留逐元素回退仅为
+    // 兼容未注入的宿主（正确性一致，性能退化）——capabilities.pdfl 会诚实标 missing
     pdfl: (html3, parseRule2, listText, listUrl, myUrl) => {
       const host = rt2.resolve("pdfl");
       if (typeof host === "function") {
@@ -908,6 +909,10 @@ async function loadEmscriptenGlue(code, key) {
     let settled = false;
     const ready = new Promise((resolve, reject) => {
       const arg = {
+        // 库形态胶水跳过 main：worker/消息循环构建的 main 会同步阻塞
+        // 引擎任务队列（央视频 CNTV wasm 实锤——initRuntime 完成后
+        // callMain 永不返回，30s 就绪超时定时器随之饿死）
+        noInitialRun: true,
         onRuntimeInitialized() {
           settled = true;
           setImmediate(() => resolve(inst));
@@ -922,7 +927,7 @@ async function loadEmscriptenGlue(code, key) {
       }
       if (inst && typeof inst === "object" && typeof inst._jsmalloc === "function" && inst.HEAP8) {
         settled = true;
-        resolve(inst);
+        resolve([inst]);
         return;
       }
       if (inst && typeof inst.then === "function") {
@@ -941,7 +946,13 @@ async function loadEmscriptenGlue(code, key) {
         });
       }
     });
-    return await withTimeout(ready, 3e4, `emscripten \u8FD0\u884C\u65F6\u5C31\u7EEA\u8D85\u65F6(30s) @${key}`);
+    const _m = await withTimeout(ready, 3e4, `emscripten \u8FD0\u884C\u65F6\u5C31\u7EEA\u8D85\u65F6(30s) @${key}`);
+    const mod = Array.isArray(_m) ? _m[0] : _m;
+    try {
+      delete mod.then;
+    } catch (_2) {
+    }
+    return mod;
   }
   if (exported && typeof exported === "object") return exported;
   throw new Drpy3Error("wasm", "load", `\u65E0\u6CD5\u8BC6\u522B\u7684 wasm \u8D44\u4EA7\u5F62\u6001: ${typeof exported} @${key}`);
@@ -2142,16 +2153,15 @@ var defaults = {
 function stripJs(s2) {
   return String(s2).trim().replace(/^js:/, "").trim();
 }
-var REQUIRED = ["req", "pdfh", "pdfa", "pd"];
+var REQUIRED = ["req", "pdfh", "pdfa", "pd", "pdfl"];
 var BUILTINS = {
   joinUrl: () => builtinJoinUrl,
   store: () => memoryStore(),
   log: () => (...args) => console.log(...args),
   getProxy: () => () => "http://127.0.0.1:9978/proxy?do=js",
-  // batchFetch / pdfl 兜底依赖 net/parse 上下文，在 lib/net.js、lib/parse.js 中组装（W4/W5），
-  // 这里先声明存在性供 capabilities 标注；resolve('batchFetch'/'pdfl') 由 net/parse 层拦截。
+  // batchFetch 兜底依赖 net 上下文，在 lib/net.js 中组装（W4）；
+  // resolve('batchFetch') 由 net 层拦截。pdfl 已升必注入（REQUIRED）。
   batchFetch: null,
-  pdfl: null,
   loadAsset: null
   // 无兜底：随源资产（wasm 等）必须有宿主实现才可用
 };

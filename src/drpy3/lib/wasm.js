@@ -108,6 +108,10 @@ async function loadEmscriptenGlue(code, key) {
         let settled = false;
         const ready = new Promise((resolve, reject) => {
             const arg = {
+                // 库形态胶水跳过 main：worker/消息循环构建的 main 会同步阻塞
+                // 引擎任务队列（央视频 CNTV wasm 实锤——initRuntime 完成后
+                // callMain 永不返回，30s 就绪超时定时器随之饿死）
+                noInitialRun: true,
                 onRuntimeInitialized() {
                     settled = true;
                     setImmediate(() => resolve(inst)); // 回调后让同步尾部代码跑完
@@ -124,7 +128,10 @@ async function loadEmscriptenGlue(code, key) {
             // 无需等待回调——避免 pthread/worker 构建在纯 Node 垫片下等待就绪回调挂起
             if (inst && typeof inst === 'object' && typeof inst._jsmalloc === 'function' && inst.HEAP8) {
                 settled = true;
-                resolve(inst);
+                // 不能用 inst 本身 resolve：emscripten Module 的 then 在
+                // calledRun=false 时吞掉 resolver 且永不回调（V4 实锤）——
+                // 包一层数组避开 thenable 语义
+                resolve([inst]);
                 return;
             }
             if (inst && typeof inst.then === 'function') {
@@ -145,7 +152,13 @@ async function loadEmscriptenGlue(code, key) {
                 });
             }
         });
-        return await withTimeout(ready, 30000, `emscripten 运行时就绪超时(30s) @${key}`);
+        const _m = await withTimeout(ready, 30000, `emscripten 运行时就绪超时(30s) @${key}`);
+        const mod = Array.isArray(_m) ? _m[0] : _m; // thenable 规避包装
+        // emscripten Module 的 then 是非标准 thenable（calledRun=false 时吞
+        // resolver 永不回调）——async 链上任何 return mod 都会再次走 thenable
+        // 解析流程被吞（央视频 CNTV wasm 实锤），必须剥掉
+        try { delete mod.then; } catch (_) {}
+        return mod;
     }
     if (exported && typeof exported === 'object') return exported;
     throw new Drpy3Error('wasm', 'load', `无法识别的 wasm 资产形态: ${typeof exported} @${key}`);
@@ -186,7 +199,7 @@ export function makeWasm(rt) {
             if (typeof loader !== 'function') {
                 throw new Drpy3Error('wasm', 'load', `HostEnv 未注入 loadAsset——无法读取随源 wasm 资产: ${source}`);
             }
-            return await loadCached('path:' + source, async () => {
+                return await loadCached('path:' + source, async () => {
                 let content = await loader(source);
                 if (content instanceof Uint8Array) {
                     if (isWasmBytes(content)) return await compileWasmBytes(content);
