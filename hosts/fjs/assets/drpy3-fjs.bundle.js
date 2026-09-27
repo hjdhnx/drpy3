@@ -398,11 +398,12 @@ function makeUtils(rt2) {
     forceOrder,
     \u662F\u5426\u6B63\u7248,
     urlDeal,
-    // proxy 类源取本地代理地址（HostEnv getProxy 的包装，§9 utils）
+    // proxy 类源取本地代理地址（HostEnv getProxy 的包装，§9 utils）；
+    // 宿主未注入时返回空串（源自行判断），不编造 9978 端口
     getProxyUrl: async () => {
       const gp = rt2.resolve("getProxy");
       const url2 = typeof gp === "function" ? await gp(true) : "";
-      return url2 || "http://127.0.0.1:9978/proxy?do=js";
+      return url2 || "";
     }
   };
 }
@@ -2158,7 +2159,9 @@ var BUILTINS = {
   joinUrl: () => builtinJoinUrl,
   store: () => memoryStore(),
   log: () => (...args) => console.log(...args),
-  getProxy: () => () => "http://127.0.0.1:9978/proxy?do=js",
+  // 代理地址唯一事实源是宿主注入（HostEnv.getProxy）；兜底一律空串，
+  // 不编造端口（9978 是 drpy-node 服务端约定，嵌壳宿主无此服务）
+  getProxy: () => () => "",
   // batchFetch 兜底依赖 net 上下文，在 lib/net.js 中组装（W4）；
   // resolve('batchFetch') 由 net 层拦截。pdfl 已升必注入（REQUIRED）。
   batchFetch: null,
@@ -18334,9 +18337,10 @@ function makeHostEnv(opts = {}) {
       } catch {
       }
     },
+    // 桥未提供/返回空一律空串兜底（代理地址唯一事实源=宿主，不编造 9978）
     getProxy: async (isPublic) => {
       const p3 = await callBridge("getProxy", { isPublic: !!isPublic });
-      return typeof p3 === "string" && p3 ? p3 : "http://127.0.0.1:9978/proxy?do=js";
+      return typeof p3 === "string" && p3 ? p3 : "";
     },
     loadAsset: async (p3) => {
       const r2 = await callBridge("loadAsset", { path: String(p3) });

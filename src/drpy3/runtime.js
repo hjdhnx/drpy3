@@ -19,7 +19,9 @@ const BUILTINS = {
     joinUrl: () => builtinJoinUrl,
     store: () => memoryStore(),
     log: () => (...args) => console.log(...args),
-    getProxy: () => () => 'http://127.0.0.1:9978/proxy?do=js',
+    // 代理地址唯一事实源是宿主注入（HostEnv.getProxy）；兜底一律空串，
+    // 不编造端口（9978 是 drpy-node 服务端约定，嵌壳宿主无此服务）
+    getProxy: () => () => '',
     // batchFetch 兜底依赖 net 上下文，在 lib/net.js 中组装（W4）；
     // resolve('batchFetch') 由 net 层拦截。pdfl 已升必注入（REQUIRED）。
     batchFetch: null,

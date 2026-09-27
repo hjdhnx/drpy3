@@ -120,11 +120,12 @@ export function makeUtils(rt) {
         forceOrder,
         是否正版,
         urlDeal,
-        // proxy 类源取本地代理地址（HostEnv getProxy 的包装，§9 utils）
+        // proxy 类源取本地代理地址（HostEnv getProxy 的包装，§9 utils）；
+        // 宿主未注入时返回空串（源自行判断），不编造 9978 端口
         getProxyUrl: async () => {
             const gp = rt.resolve('getProxy');
             const url = typeof gp === 'function' ? await gp(true) : '';
-            return url || 'http://127.0.0.1:9978/proxy?do=js';
+            return url || '';
         },
     };
 }

@@ -84,9 +84,10 @@ function makeHostEnv(opts = {}) {
                 console.log('[drpy3]', ...args);
             } catch { /* console 未注入时静默 */ }
         },
+        // 桥未提供/返回空一律空串兜底（代理地址唯一事实源=宿主，不编造 9978）
         getProxy: async (isPublic) => {
             const p = await callBridge('getProxy', {isPublic: !!isPublic});
-            return typeof p === 'string' && p ? p : 'http://127.0.0.1:9978/proxy?do=js';
+            return typeof p === 'string' && p ? p : '';
         },
         loadAsset: async (p) => {
             const r = await callBridge('loadAsset', {path: String(p)});

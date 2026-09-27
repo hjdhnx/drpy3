@@ -84,14 +84,14 @@ test('W4 batchFetch：宿主注入原生实现优先（线程池/协程加速位
     assert.deepEqual(await src.callStage('run'), ['native:a']);
 });
 
-test('W4 getProxyUrl：HostEnv getProxy 优先，缺省兜底 9978 地址', async () => {
+test('W4 getProxyUrl：HostEnv getProxy 优先，缺省兜底空串（不编造端口）', async () => {
     const rt1 = new Runtime({...HOST_ENV, req: async () => ({content: '', headers: {}}), getProxy: () => 'http://127.0.0.1:5707/api/v1/vod?do=js'});
     const s1 = await rt1.load({meta: {title: 'P'}, async run(ctx) { return await ctx.lib.utils.getProxyUrl(); }}, {key: '_p1'});
     assert.equal(await s1.callStage('run'), 'http://127.0.0.1:5707/api/v1/vod?do=js');
 
     const rt2 = new Runtime({...HOST_ENV, req: async () => ({content: '', headers: {}})});
     const s2 = await rt2.load({meta: {title: 'P'}, async run(ctx) { return await ctx.getProxyUrl(); }}, {key: '_p2'});
-    assert.equal(await s2.callStage('run'), 'http://127.0.0.1:9978/proxy?do=js');
+    assert.equal(await s2.callStage('run'), '');
 });
 
 test('W4 store：自定义介质（HostEnv 注入）按源命名空间隔离 + delete', async () => {

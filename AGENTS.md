@@ -21,6 +21,13 @@ drpy3 的专属仓库：下一代 drpy 源规则引擎（从 drpy-webpack 仓库
   `dist/drpy3-peer.js`、`dist/drpy3-globals-capture.js` 是构建产物（`npm run build` 生成），勿手改。
 - **`dist/drpy-core-lite.min.js` 是 peer 库包**（CryptoJS/jinja/模板/pako/gbkTool…），
   引擎经 peer 装载链（drpy3-peer.js → drpy3-globals-capture.js）引用，随仓库分发，勿重造勿替换。
+- **qjs so 适配版 bundle（2026-09-28）**：`hosts/fjs/tools/build-qjs.mjs` 产出
+  `hosts/fjs/assets/drpy3-qjs.bundle.js`（目标宿主 = libquickjs_bridge.so，与 drpy2 同引擎）——
+  cheerio→so 全局（Lexbor）、pako→so zlib、gbkTool→so TextEncoder(GBK)，库包经 peer 重定向
+  到同级 drpy-webpack 仓库的 `dist/drpy-core-qjs.min.js`（先在那边 `npm run esbuild` 构建；
+  jinja 以源码字符串内联 + 运行时全局 eval，规避 esbuild 打包 jinja 的作用域语义破坏——
+  drpy-webpack 仓库 esbuild.config.cjs 的警告）。体积 1.44MB→764KB，测试 `test/qjs-bundle.test.mjs`
+  （node 模拟 so 全局）。DsPlayer 本体 `assets/drpy3/` 消费此产物。
 - **铁律：src/drpy3/** 禁止任何平台专属导入**（node: 等）——`npm run build`（esbuild
   --platform=neutral）通过为准。Node 专属代码只允许在 `cli/` 与 `test/`。
 - **演示稿是可执行规范**（docs/百忙无果1-4.js、央视频-dr3.js 等），不得修改演示稿迁就实现。
