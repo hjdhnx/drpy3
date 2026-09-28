@@ -66,6 +66,37 @@ class MockSoTextEncoder {
 }
 globalThis.TextEncoder = MockSoTextEncoder;
 
+// ── 同步 WebCrypto mock（crypto-d2 的 C 覆盖路径按同步取值，node 原生 subtle
+// 是异步的测不了；用 node:crypto 的同步 API 等价模拟 so 的同步 C 桥）──
+// 覆盖面 = 测试消费面：AES-CBC importKey/encrypt/decrypt + getRandomValues +
+// createHash/createHmac（node 风格）。GCM/PBKDF2 未实现（测试不消费）。
+const nodeCryptoMod = await import('node:crypto');
+const _syncCrypto = (() => {
+    const nodeCrypto = nodeCryptoMod.webcrypto;
+    const keyBytes = (key) => (key instanceof Uint8Array ? key : new Uint8Array(key));
+    const cbcAlgo = (keyBytesLen) => ({16: 'aes-128-cbc', 24: 'aes-192-cbc', 32: 'aes-256-cbc'}[keyBytesLen]);
+    return {
+        getRandomValues: (arr) => nodeCrypto.getRandomValues(arr),
+        createHash: (name) => nodeCryptoMod.createHash(name.toLowerCase().replace('-', '')),
+        createHmac: (name, key) => nodeCryptoMod.createHmac(name.toLowerCase(), key),
+        subtle: {
+            importKey: (fmt, data) => keyBytes(data), // mock：透传原始字节
+            encrypt: (cfg, key, data) => {
+                if (cfg.name !== 'AES-CBC') throw new Error('mock subtle: 仅实现 AES-CBC');
+                const c = nodeCryptoMod.createCipheriv(cbcAlgo(key.length), key, new Uint8Array(cfg.iv));
+                return new Uint8Array(Buffer.concat([c.update(data), c.final()]));
+            },
+            decrypt: (cfg, key, data) => {
+                if (cfg.name !== 'AES-CBC') throw new Error('mock subtle: 仅实现 AES-CBC');
+                const d = nodeCryptoMod.createDecipheriv(cbcAlgo(key.length), key, new Uint8Array(cfg.iv));
+                return new Uint8Array(Buffer.concat([d.update(data), d.final()]));
+            },
+        },
+    };
+})();
+// node 22 的 globalThis.crypto 是 getter-only，defineProperty 强制覆盖
+Object.defineProperty(globalThis, 'crypto', {value: _syncCrypto, configurable: true});
+
 // 宿主桥：req → 本地 mock；evalModule → data URL 动态 import（模拟 Dart declareNewModule）；
 // getProxy 刻意不注入（验 9978 空串兜底）
 globalThis.fjs = {
@@ -148,6 +179,20 @@ export default {meta, async home(ctx){ return await ctx.lib.utils.getProxyUrl();
     assert.ok(await bundle.drpy3Load(code, '_gpqjs', '', '', ''), 'load 成功');
     const url = JSON.parse(await bundle.drpy3Call('_gpqjs', 'home', '[""]'));
     assert.equal(url, '', 'getProxyUrl 返回空串，不编造 9978');
+});
+
+test('qjs bundle：aesX 往返（crypto-d2 C 覆盖走同步 subtle mock）+ md5', {timeout: 30000}, async () => {
+    const code = `const meta={title:'cry',type:0,direct:true};
+export default {meta, async home(ctx){
+    const key = '0123456789abcdef', iv = 'abcdef9876543210';
+    const ct = ctx.lib.crypto.aesX('aes-plain', key, iv, {method: 'enc', utf8: 1});
+    const pt = ctx.lib.crypto.aesX(ct, key, iv, {method: 'dec', utf8: 1});
+    return { aes: pt, md5: ctx.lib.crypto.md5('abc') };
+}}`;
+    assert.ok(await bundle.drpy3Load(code, '_cryqjs', '', '', ''), 'load 成功');
+    const r = JSON.parse(await bundle.drpy3Call('_cryqjs', 'home', '[""]'));
+    assert.equal(r.aes, 'aes-plain', 'aesX 往返');
+    assert.equal(r.md5, '900150983cd24fb0d6963f7d28e17f72', 'md5 标准向量');
 });
 
 test('core-qjs：gbkTool 与原版 gb18030 逐字节对拍', async () => {
