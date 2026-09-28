@@ -13,7 +13,7 @@
 //   - evalModule→ bridge：Dart declareNewModule 后 JS 动态 import（fjs 模块一经加载
 //                 不可替换——含相对 import 的源热更需重建引擎，见 README 已知限制）
 //   - load2x 老源：档 A 无同步 HTTP 原语，syncReq 不提供 → drpy2 老源不支持（README）
-import {Runtime} from '../../dist/drpy3.js';
+import {Runtime, exposeRuntimeGlobals} from '../../dist/drpy3.js';
 import {jsoup} from '../../cli/htmlParser.js';
 
 // ── 全局垫片：引擎/库包依赖 WHATWG URL（builtinJoinUrl 等）。
@@ -113,7 +113,11 @@ const SOURCES = new Map(); // key -> Source 实例
 let RT = null;
 
 function rt() {
-    if (!RT) RT = new Runtime(makeHostEnv(globalThis.__drpy3Opts || {}));
+    if (!RT) {
+        RT = new Runtime(makeHostEnv(globalThis.__drpy3Opts || {}));
+        // dr2 迁移裸名工具面（md5/pdfh/urljoin/MOBILE_UA/print 等裸名直用）
+        exposeRuntimeGlobals(RT);
+    }
     return RT;
 }
 

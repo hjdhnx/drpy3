@@ -2176,10 +2176,29 @@ var VERSION = "drpy3 0.1.0";
 function defineSource(source) {
   return source;
 }
-var index_default = { Runtime, defineSource, VERSION };
+function exposeRuntimeGlobals(rt) {
+  const g = globalThis;
+  const put = (names, ns) => {
+    for (const n of names) {
+      if (ns[n] !== void 0 && g[n] === void 0) g[n] = ns[n];
+    }
+  };
+  put(["md5", "base64Encode", "base64Decode", "gzip", "ungzip", "aesX", "desX", "rc4", "rsaX"], makeCrypto(rt));
+  put(["cut", "encodeStr", "decodeStr"], makeText());
+  put(["joinUrl", "getHome", "urlencode", "encodeUrl", "buildUrl", "buildQueryString", "forceOrder", "\u662F\u5426\u6B63\u7248", "urlDeal"], makeUtils(rt));
+  put(["pdfh", "pdfa", "pd", "pdfl", "jp"], makeParse(rt));
+  if (g.urljoin === void 0) g.urljoin = g.joinUrl;
+  for (const k of ["MOBILE_UA", "PC_UA", "IOS_UA", "UC_UA"]) {
+    if (g[k] === void 0) g[k] = UA[k];
+  }
+  if (g.log === void 0) g.log = (...args) => rt.resolve("log")(...args);
+  if (g.print === void 0) g.print = g.log;
+}
+var index_default = { Runtime, defineSource, exposeRuntimeGlobals, VERSION };
 export {
   Runtime,
   VERSION,
   index_default as default,
-  defineSource
+  defineSource,
+  exposeRuntimeGlobals
 };
